@@ -164,10 +164,39 @@
 
         <label>Select Currency:</label>
         <select id="currency" onchange="fetchGoldSilverRates()">
-            <option value="USD">USD ($)</option>
-            <option value="EUR">EUR (€)</option>
-            <option value="GBP">GBP (£)</option>
-            <option value="PKR">PKR (₨)</option>
+            <option value="USD">USD ($) - US Dollar</option>
+            <option value="AED">AED (د.إ) - UAE Dirham</option>
+            <option value="AUD">AUD ($) - Australian Dollar</option>
+            <option value="BDT">BDT (৳) - Bangladeshi Taka</option>
+            <option value="BHD">BHD (.د.ب) - Bahraini Dinar</option>
+            <option value="CAD">CAD ($) - Canadian Dollar</option>
+            <option value="CHF">CHF (Fr) - Swiss Franc</option>
+            <option value="CNY">CNY (¥) - Chinese Yuan</option>
+            <option value="EGP">EGP (£) - Egyptian Pound</option>
+            <option value="EUR">EUR (€) - Euro</option>
+            <option value="GBP">GBP (£) - British Pound</option>
+            <option value="IDR">IDR (Rp) - Indonesian Rupiah</option>
+            <option value="INR">INR (₹) - Indian Rupee</option>
+            <option value="JOD">JOD (د.ا) - Jordanian Dinar</option>
+            <option value="JPY">JPY (¥) - Japanese Yen</option>
+            <option value="KWD">KWD (د.ك) - Kuwaiti Dinar</option>
+            <option value="LKR">LKR (₨) - Sri Lankan Rupee</option>
+            <option value="MAD">MAD (د.م.) - Moroccan Dirham</option>
+            <option value="MYR">MYR (RM) - Malaysian Ringgit</option>
+            <option value="NGN">NGN (₦) - Nigerian Naira</option>
+            <option value="OMR">OMR (ر.ع.) - Omani Rial</option>
+            <option value="PKR">PKR (₨) - Pakistani Rupee</option>
+            <option value="QAR">QAR (ر.ق) - Qatari Riyal</option>
+            <option value="SAR">SAR (ر.س) - Saudi Riyal</option>
+            <option value="SGD">SGD ($) - Singapore Dollar</option>
+            <option value="TRY">TRY (₺) - Turkish Lira</option>
+            <option value="ZAR">ZAR (R) - South African Rand</option>
+        </select>
+
+        <label>Select Nisab Standard:</label>
+        <select id="nisabStandard">
+            <option value="gold">Gold Standard (85g)</option>
+            <option value="silver" selected>Silver Standard (595g) - Recommended</option>
         </select>
 
         <label>Gold & Silver Rates:</label>
@@ -245,6 +274,17 @@
         async function fetchGoldSilverRates() {
             selectedCurrency = document.getElementById("currency").value.toLowerCase();
             try {
+                // First fetch exchange rates for all currencies
+                const exchangeResponse = await fetch(`https://api.exchangerate-api.com/v4/latest/USD`);
+                const exchangeData = await exchangeResponse.json();
+                
+                if (!exchangeData.rates) {
+                    throw new Error("Failed to fetch exchange rates");
+                }
+
+                // Store the exchange rate for selected currency
+                currencyRate = exchangeData.rates[selectedCurrency.toUpperCase()] || 1;
+
                 // Using Metals-API for real-time precious metal prices
                 const apiKey = 'c8v5m0oi2xfqrg4ne8p2qw9mad6j0k1lhs3b7u4f';
                 const response = await fetch(`https://metals-api.com/api/latest?access_key=${apiKey}&base=USD&symbols=XAU,XAG`);
@@ -260,27 +300,33 @@
                 goldPrice = (1 / data.rates.XAU) / 31.1035; // Convert from USD/oz to USD/g
                 silverPrice = (1 / data.rates.XAG) / 31.1035;
 
-                // If currency is not USD, convert prices
-                if (selectedCurrency !== 'usd') {
-                    const exchangeResponse = await fetch(`https://api.exchangerate-api.com/v4/latest/USD`);
-                    const exchangeData = await exchangeResponse.json();
-                    const rate = exchangeData.rates[selectedCurrency.toUpperCase()];
-                    goldPrice *= rate;
-                    silverPrice *= rate;
-                }
+                // Convert to selected currency
+                goldPrice *= currencyRate;
+                silverPrice *= currencyRate;
 
-                console.log("Final gold price per gram:", goldPrice);
-                console.log("Final silver price per gram:", silverPrice);
+                console.log(`Exchange rate for ${selectedCurrency.toUpperCase()}: ${currencyRate}`);
+                console.log(`Final gold price per gram in ${selectedCurrency.toUpperCase()}: ${goldPrice}`);
+                console.log(`Final silver price per gram in ${selectedCurrency.toUpperCase()}: ${silverPrice}`);
+
+                // Get currency symbol
+                const currencySymbols = {
+                    usd: '$', eur: '€', gbp: '£', pkr: '₨', aed: 'د.إ', aud: '$', 
+                    bdt: '৳', bhd: '.د.ب', cad: '$', chf: 'Fr', cny: '¥', egp: '£',
+                    idr: 'Rp', inr: '₹', jod: 'د.ا', jpy: '¥', kwd: 'د.ك', lkr: '₨',
+                    mad: 'د.م.', myr: 'RM', ngn: '₦', omr: 'ر.ع.', qar: 'ر.ق', 
+                    sar: 'ر.س', sgd: '$', try: '₺', zar: 'R'
+                };
+                const currencySymbol = currencySymbols[selectedCurrency] || selectedCurrency.toUpperCase();
 
                 // Update the display with current prices
                 document.getElementById("goldRate").innerHTML = `
-                    <span style="color: #27ae60;">Gold Price: ${selectedCurrency.toUpperCase()} ${goldPrice.toFixed(2)} per gram</span>
+                    <span style="color: #27ae60;">Gold Price: ${currencySymbol} ${goldPrice.toFixed(2)} per gram</span>
                     <br>
                     <small style="color: #666;">(Updated: ${new Date().toLocaleString()})</small>
                 `;
                 
                 document.getElementById("silverRate").innerHTML = `
-                    <span style="color: #27ae60;">Silver Price: ${selectedCurrency.toUpperCase()} ${silverPrice.toFixed(2)} per gram</span>
+                    <span style="color: #27ae60;">Silver Price: ${currencySymbol} ${silverPrice.toFixed(2)} per gram</span>
                     <br>
                     <small style="color: #666;">(Updated: ${new Date().toLocaleString()})</small>
                 `;
@@ -310,19 +356,28 @@
                     if (selectedCurrency !== 'usd') {
                         const exchangeResponse = await fetch(`https://api.exchangerate-api.com/v4/latest/USD`);
                         const exchangeData = await exchangeResponse.json();
-                        const rate = exchangeData.rates[selectedCurrency.toUpperCase()];
-                        goldPrice *= rate;
-                        silverPrice *= rate;
+                        currencyRate = exchangeData.rates[selectedCurrency.toUpperCase()] || 1;
+                        goldPrice *= currencyRate;
+                        silverPrice *= currencyRate;
                     }
+
+                    const currencySymbols = {
+                        usd: '$', eur: '€', gbp: '£', pkr: '₨', aed: 'د.إ', aud: '$', 
+                        bdt: '৳', bhd: '.د.ب', cad: '$', chf: 'Fr', cny: '¥', egp: '£',
+                        idr: 'Rp', inr: '₹', jod: 'د.ا', jpy: '¥', kwd: 'د.ك', lkr: '₨',
+                        mad: 'د.م.', myr: 'RM', ngn: '₦', omr: 'ر.ع.', qar: 'ر.ق', 
+                        sar: 'ر.س', sgd: '$', try: '₺', zar: 'R'
+                    };
+                    const currencySymbol = currencySymbols[selectedCurrency] || selectedCurrency.toUpperCase();
                     
                     document.getElementById("goldRate").innerHTML = `
-                        <span style="color: #27ae60;">Gold Price: ${selectedCurrency.toUpperCase()} ${goldPrice.toFixed(2)} per gram</span>
+                        <span style="color: #27ae60;">Gold Price: ${currencySymbol} ${goldPrice.toFixed(2)} per gram</span>
                         <br>
                         <small style="color: #666;">(Updated: ${new Date().toLocaleString()} - Using fallback prices)</small>
                     `;
                     
                     document.getElementById("silverRate").innerHTML = `
-                        <span style="color: #27ae60;">Silver Price: ${selectedCurrency.toUpperCase()} ${silverPrice.toFixed(2)} per gram</span>
+                        <span style="color: #27ae60;">Silver Price: ${currencySymbol} ${silverPrice.toFixed(2)} per gram</span>
                         <br>
                         <small style="color: #666;">(Updated: ${new Date().toLocaleString()} - Using fallback prices)</small>
                     `;
@@ -411,7 +466,13 @@
                 totalInvestments
             ).toFixed(2);
 
-            let nisabThreshold = (85 * goldPrice * currencyRate).toFixed(2);
+            // Calculate both Nisab thresholds
+            let goldNisabThreshold = (85 * goldPrice * currencyRate).toFixed(2);  // 85g of gold
+            let silverNisabThreshold = (595 * silverPrice * currencyRate).toFixed(2);  // 595g of silver
+
+            // Get selected Nisab standard
+            let selectedNisabStandard = document.getElementById("nisabStandard").value;
+            let nisabThreshold = selectedNisabStandard === 'gold' ? goldNisabThreshold : silverNisabThreshold;
 
             // Create detailed breakdown
             let breakdown = `
@@ -424,14 +485,24 @@
                 <p>Investments: ${selectedCurrency.toUpperCase()} ${totalInvestments.toFixed(2)}</p>
                 <hr>
                 <p><strong>Total Wealth: ${selectedCurrency.toUpperCase()} ${totalWealth}</strong></p>
-                <p><strong>Nisab Threshold: ${selectedCurrency.toUpperCase()} ${nisabThreshold}</strong></p>
+                <p>Gold Nisab (85g): ${selectedCurrency.toUpperCase()} ${goldNisabThreshold}</p>
+                <p>Silver Nisab (595g): ${selectedCurrency.toUpperCase()} ${silverNisabThreshold}</p>
+                <p><strong>Selected Nisab (${selectedNisabStandard}): ${selectedCurrency.toUpperCase()} ${nisabThreshold}</strong></p>
             `;
 
-            if (totalWealth >= nisabThreshold) {
-                let zakatDue = (totalWealth * 0.025).toFixed(2);
-                breakdown += `<p style="color: #27ae60;"><strong>Zakat Due: ${selectedCurrency.toUpperCase()} ${zakatDue}</strong></p>`;
+            if (parseFloat(totalWealth) >= parseFloat(nisabThreshold)) {
+                let zakatDue = (parseFloat(totalWealth) * 0.025).toFixed(2);
+                breakdown += `
+                    <hr>
+                    <p style="color: #27ae60;"><strong>Zakat Due: ${selectedCurrency.toUpperCase()} ${zakatDue}</strong></p>
+                    <small style="color: #666;">(2.5% of total wealth)</small>
+                `;
             } else {
-                breakdown += `<p style="color: #e74c3c;"><strong>Zakat Not Due</strong></p>`;
+                breakdown += `
+                    <hr>
+                    <p style="color: #e74c3c;"><strong>Zakat Not Due</strong></p>
+                    <small style="color: #666;">Total wealth is below the Nisab threshold</small>
+                `;
             }
 
             document.getElementById("result").innerHTML = breakdown;
