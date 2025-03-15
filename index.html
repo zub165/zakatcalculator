@@ -2,10 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#4CAF50">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Zakat Calculator">
+    <meta name="apple-mobile-web-app-title" content="Zakat Calculator">
+    <meta name="msapplication-TileColor" content="#4CAF50">
+    <meta name="description" content="Calculate your Zakat easily with our modern calculator">
+    
     <title>Zakat Calculator</title>
+    
+    <!-- PWA Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/zub165/zakatcalculator/main/icons/icon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/zub165/zakatcalculator/main/icons/icon-180.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
     <style>
         :root {
             /* Default Theme (Green) */
@@ -286,32 +301,118 @@
             color: var(--primary-color);
         }
 
+        /* Enhanced touch-friendly styles */
+        @media (hover: none) {
+            .category-card:hover {
+                transform: none;
+            }
+            
+            .category-card:active {
+                transform: scale(0.98);
+                background: var(--hover-color);
+            }
+            
+            .calculate-btn:active {
+                transform: scale(0.98);
+            }
+        }
+
+        /* iOS-specific styles */
+        @supports (-webkit-touch-callout: none) {
+            input, select, button {
+                -webkit-appearance: none;
+                appearance: none;
+            }
+            
+            select {
+                background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333'%3E%3Cpath d='M6 9L0 0h12z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 8px center;
+                padding-right: 24px;
+            }
+        }
+
+        /* Better mobile responsiveness */
         @media (max-width: 768px) {
             .container {
-                padding: 15px;
+                padding: 12px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .theme-switcher {
+                justify-content: center;
             }
 
             .card-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
             }
 
-            .title {
-                font-size: 20px;
+            .category-card {
+                padding: 15px;
             }
 
-            .theme-switcher {
-                flex-wrap: wrap;
+            .input-section, .rates-card {
+                padding: 15px;
             }
 
-            .theme-btn {
-                padding: 6px 12px;
-                font-size: 14px;
+            .input-group input,
+            .input-group select {
+                font-size: 16px; /* Prevents iOS zoom */
+                padding: 10px;
+            }
+
+            .calculate-btn {
+                padding: 12px;
+                margin-bottom: 20px;
             }
         }
 
         @media (max-width: 480px) {
             .card-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .theme-btn {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            .category-icon {
+                font-size: 20px;
+            }
+
+            .category-name {
+                font-size: 14px;
+            }
+
+            .category-value {
+                font-size: 12px;
+                padding: 3px 8px;
+            }
+        }
+
+        /* Prevent pull-to-refresh on mobile */
+        html, body {
+            overscroll-behavior-y: contain;
+            -webkit-overflow-scrolling: touch;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        /* Safe area insets for notched devices */
+        @supports (padding: max(0px)) {
+            .container {
+                padding-left: max(20px, env(safe-area-inset-left));
+                padding-right: max(20px, env(safe-area-inset-right));
+                padding-bottom: max(20px, env(safe-area-inset-bottom));
             }
         }
     </style>
@@ -752,7 +853,62 @@
             document.getElementById("result").innerHTML = resultHTML;
             document.getElementById("result").style.display = "block";
         }
+
+        // Add touch event handling for mobile
+        document.addEventListener('touchstart', function() {}, {passive: true});
+        
+        // Prevent double-tap zoom on iOS
+        document.addEventListener('dblclick', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+        
+        // Prevent elastic scrolling on iOS
+        document.body.addEventListener('touchmove', function(e) {
+            if (e.target.closest('.input-group, .result-card')) return;
+            e.preventDefault();
+        }, { passive: false });
+        
+        // Add platform detection
+        function detectPlatform() {
+            const ua = navigator.userAgent.toLowerCase();
+            if (ua.includes('android')) return 'android';
+            if (ua.includes('iphone') || ua.includes('ipad') || ua.includes('ipod')) return 'ios';
+            return 'desktop';
+        }
+        
+        // Adjust UI based on platform
+        document.addEventListener('DOMContentLoaded', () => {
+            const platform = detectPlatform();
+            document.body.setAttribute('data-platform', platform);
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('preferred-theme') || 'default';
+            setTheme(savedTheme);
+            
+            // Initialize sections
+            const sections = ['gold-section', 'business-section', 'investments-section', 'property-section'];
+            sections.forEach(section => {
+                document.getElementById(section).style.display = 'none';
+            });
+            
+            // Initial rates fetch
+            fetchGoldSilverRates();
+            
+            // Add active states for touch devices
+            if (platform === 'ios' || platform === 'android') {
+                document.querySelectorAll('.category-card, .calculate-btn').forEach(el => {
+                    el.addEventListener('touchstart', function() {
+                        this.style.transform = 'scale(0.98)';
+                    }, { passive: true });
+                    
+                    el.addEventListener('touchend', function() {
+                        this.style.transform = '';
+                    }, { passive: true });
+                });
+            }
+        });
     </script>
 </body>
 </html>
+
 
