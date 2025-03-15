@@ -688,14 +688,16 @@
         <div id="sections">
             <!-- Cash Section -->
             <div id="cash-section" class="input-group">
-        <label>Cash & Bank Balance:</label>
-        <input type="number" id="cash" placeholder="Enter amount" min="0">
+                <label>Cash & Bank Balance: <small style="color: var(--primary-color);">(You can enter expressions like "1000+500")</small></label>
+                <input type="text" id="cash" placeholder="Enter amount (e.g. 1000+500)" oninput="validateNumericInput(this, 'cashFeedback')">
+                <div id="cashFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
             </div>
 
             <!-- Gold & Silver Section -->
             <div id="gold-section" class="input-group">
-        <label>Gold Weight:</label>
-        <input type="number" id="goldWeight" placeholder="Enter weight" min="0">
+                <label>Gold Weight: <small style="color: var(--primary-color);">(You can enter expressions like "13.5+26")</small></label>
+                <input type="text" id="goldWeight" placeholder="Enter weight (e.g. 13.5+26)" oninput="validateNumericInput(this, 'goldInputFeedback')">
+                <div id="goldInputFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
         <select id="goldUnit">
             <option value="grams">Grams</option>
             <option value="tola">Tolas</option>
@@ -703,8 +705,9 @@
             <option value="lbs">Pounds</option>
         </select>
 
-        <label>Silver Weight:</label>
-        <input type="number" id="silverWeight" placeholder="Enter weight" min="0">
+                <label>Silver Weight: <small style="color: var(--primary-color);">(You can enter expressions like "100+50")</small></label>
+                <input type="text" id="silverWeight" placeholder="Enter weight (e.g. 100+50)" oninput="validateNumericInput(this, 'silverInputFeedback')">
+                <div id="silverInputFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
         <select id="silverUnit">
             <option value="grams">Grams</option>
             <option value="tola">Tolas</option>
@@ -715,53 +718,66 @@
 
             <!-- Business Assets Section -->
             <div id="business-section" class="input-group">
-                <label>Business Inventory Value:</label>
-                <input type="number" id="inventoryValue" placeholder="Enter inventory value" min="0">
+                <label>Business Inventory Value: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="inventoryValue" placeholder="Enter inventory value" oninput="validateNumericInput(this, 'inventoryFeedback')">
+                <div id="inventoryFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
                 
-                <label>Business Bank Balance:</label>
-                <input type="number" id="businessBank" placeholder="Enter business account balance" min="0">
+                <label>Business Bank Balance: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="businessBank" placeholder="Enter business account balance" oninput="validateNumericInput(this, 'businessBankFeedback')">
+                <div id="businessBankFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
                 
-                <label>Accounts Receivable:</label>
-                <input type="number" id="accountsReceivable" placeholder="Enter receivables amount" min="0">
+                <label>Accounts Receivable: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="accountsReceivable" placeholder="Enter receivables amount" oninput="validateNumericInput(this, 'receivableFeedback')">
+                <div id="receivableFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
             </div>
 
             <!-- Investments Section -->
             <div id="investments-section" class="input-group">
-                <label>Stocks Portfolio Value:</label>
-                <input type="number" id="stocksValue" placeholder="Enter total stocks value" min="0">
+                <label>Stocks Portfolio Value: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="stocksValue" placeholder="Enter total stocks value" oninput="validateNumericInput(this, 'stocksFeedback')">
+                <div id="stocksFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
                 
-                <label>Mutual Funds Value:</label>
-                <input type="number" id="mutualFundsValue" placeholder="Enter mutual funds value" min="0">
+                <label>Mutual Funds Value: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="mutualFundsValue" placeholder="Enter mutual funds value" oninput="validateNumericInput(this, 'mutualFundsFeedback')">
+                <div id="mutualFundsFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
                 
-                <label>Cryptocurrency Value:</label>
-                <input type="number" id="cryptoValue" placeholder="Enter cryptocurrency value" min="0">
+                <label>Cryptocurrency Value: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="cryptoValue" placeholder="Enter cryptocurrency value" oninput="validateNumericInput(this, 'cryptoFeedback')">
+                <div id="cryptoFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
             </div>
 
             <!-- Property Section -->
             <div id="property-section" class="input-group">
-                <label>Annual Rental Income:</label>
-                <input type="number" id="rentalIncome" placeholder="Enter annual rental income" min="0">
+                <label>Annual Rental Income: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="rentalIncome" placeholder="Enter annual rental income" oninput="validateNumericInput(this, 'rentalIncomeFeedback')">
+                <div id="rentalIncomeFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
                 
-                <label>Rental Property Value:</label>
-                <input type="number" id="propertyValue" placeholder="Enter property value" min="0">
+                <label>Rental Property Value: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="propertyValue" placeholder="Enter property value" oninput="validateNumericInput(this, 'propertyValueFeedback')">
+                <div id="propertyValueFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
                 
-                <label>Outstanding Rental Payments:</label>
-                <input type="number" id="outstandingRent" placeholder="Enter outstanding rent" min="0">
+                <label>Outstanding Rental Payments: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="outstandingRent" placeholder="Enter outstanding rent" oninput="validateNumericInput(this, 'outstandingRentFeedback')">
+                <div id="outstandingRentFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
             </div>
 
             <!-- Other Assets Section -->
             <div id="other-section" class="input-group">
-                <label>Jewelry Value (excluding personal use):</label>
-                <input type="number" id="jewelryValue" placeholder="Enter jewelry value" min="0">
+                <label>Jewelry Value: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="jewelryValue" placeholder="Enter jewelry value" oninput="validateNumericInput(this, 'jewelryFeedback')">
+                <div id="jewelryFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
                 
-                <label>Vehicles Value (excluding personal use):</label>
-                <input type="number" id="vehiclesValue" placeholder="Enter vehicles value" min="0">
+                <label>Vehicles Value: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="vehiclesValue" placeholder="Enter vehicles value" oninput="validateNumericInput(this, 'vehiclesFeedback')">
+                <div id="vehiclesFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
                 
-                <label>Other Valuable Items:</label>
-                <input type="number" id="otherValuables" placeholder="Enter value of other items" min="0">
+                <label>Other Valuable Items: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="otherValuables" placeholder="Enter value of other items" oninput="validateNumericInput(this, 'otherValuablesFeedback')">
+                <div id="otherValuablesFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
                 
-                <label>Loans Given to Others:</label>
-                <input type="number" id="loansGiven" placeholder="Enter total loans given" min="0">
+                <label>Loans Given to Others: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="loansGiven" placeholder="Enter total loans given" oninput="validateNumericInput(this, 'loansGivenFeedback')">
+                <div id="loansGivenFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
             </div>
         </div>
 
@@ -950,60 +966,110 @@
             }
         }
 
+        function evaluateExpression(expr) {
+            try {
+                // Remove all spaces and validate input contains only numbers and basic operators
+                expr = expr.replace(/\s+/g, '');
+                if (!expr) return 0;
+                if (!/^[\d+\-.]*$/.test(expr)) {
+                    return 0;
+                }
+                // Split by + and sum the numbers
+                const numbers = expr.split('+').map(num => parseFloat(num) || 0);
+                return numbers.reduce((sum, num) => sum + num, 0);
+            } catch (e) {
+                console.error('Error evaluating expression:', e);
+                return 0;
+            }
+        }
+
+        function validateNumericInput(input, feedbackId) {
+            const feedback = document.getElementById(feedbackId);
+            const value = input.value;
+            
+            if (!value) {
+                feedback.textContent = '';
+                return;
+            }
+            
+            const result = evaluateExpression(value);
+            if (result === 0 && value !== '0') {
+                feedback.textContent = 'Please enter valid numbers (e.g. 100+50)';
+                feedback.style.color = '#e74c3c';
+            } else {
+                feedback.textContent = `Total: ${result.toFixed(2)}`;
+                feedback.style.color = 'var(--primary-color)';
+            }
+            return result;
+        }
+
         function convertWeight(weight, unit) {
+            // Handle arithmetic expressions in weight
+            if (typeof weight === 'string') {
+                weight = evaluateExpression(weight);
+            }
+            
+            // Ensure weight is treated as a number
+            weight = Number(weight);
+            if (isNaN(weight)) return 0;
+
             const conversion = {
                 grams: 1,
                 tola: 11.664,
                 oz: 31.1035,
                 lbs: 453.592
             };
-            return weight * conversion[unit];
+            // Ensure precise decimal calculation
+            return parseFloat((weight * conversion[unit]).toFixed(4));
         }
 
         function calculateZakat() {
-            // Get basic assets
-            let cash = parseFloat(document.getElementById("cash").value) || 0;
-            let goldWeight = parseFloat(document.getElementById("goldWeight").value) || 0;
+            // Get all values using evaluateExpression
+            let cash = evaluateExpression(document.getElementById("cash").value);
+            let goldWeight = document.getElementById("goldWeight").value;
             let goldUnit = document.getElementById("goldUnit").value;
-            let silverWeight = parseFloat(document.getElementById("silverWeight").value) || 0;
+            let silverWeight = document.getElementById("silverWeight").value;
             let silverUnit = document.getElementById("silverUnit").value;
 
-            // Get business assets
-            let inventoryValue = parseFloat(document.getElementById("inventoryValue").value) || 0;
-            let businessBank = parseFloat(document.getElementById("businessBank").value) || 0;
-            let accountsReceivable = parseFloat(document.getElementById("accountsReceivable").value) || 0;
+            // Business assets
+            let inventoryValue = evaluateExpression(document.getElementById("inventoryValue").value);
+            let businessBank = evaluateExpression(document.getElementById("businessBank").value);
+            let accountsReceivable = evaluateExpression(document.getElementById("accountsReceivable").value);
+            
+            // Property
+            let rentalIncome = evaluateExpression(document.getElementById("rentalIncome").value);
+            let propertyValue = evaluateExpression(document.getElementById("propertyValue").value);
+            let outstandingRent = evaluateExpression(document.getElementById("outstandingRent").value);
+            
+            // Investments
+            let stocksValue = evaluateExpression(document.getElementById("stocksValue").value);
+            let mutualFundsValue = evaluateExpression(document.getElementById("mutualFundsValue").value);
+            let cryptoValue = evaluateExpression(document.getElementById("cryptoValue").value);
+            
+            // Other assets
+            let jewelryValue = evaluateExpression(document.getElementById("jewelryValue").value);
+            let vehiclesValue = evaluateExpression(document.getElementById("vehiclesValue").value);
+            let otherValuables = evaluateExpression(document.getElementById("otherValuables").value);
+            let loansGiven = evaluateExpression(document.getElementById("loansGiven").value);
 
-            // Get rental income and property
-            let rentalIncome = parseFloat(document.getElementById("rentalIncome").value) || 0;
-            let propertyValue = parseFloat(document.getElementById("propertyValue").value) || 0;
-            let outstandingRent = parseFloat(document.getElementById("outstandingRent").value) || 0;
-
-            // Get investment values
-            let stocksValue = parseFloat(document.getElementById("stocksValue").value) || 0;
-            let mutualFundsValue = parseFloat(document.getElementById("mutualFundsValue").value) || 0;
-            let cryptoValue = parseFloat(document.getElementById("cryptoValue").value) || 0;
-
-            // Get other assets
-            let jewelryValue = parseFloat(document.getElementById("jewelryValue").value) || 0;
-            let vehiclesValue = parseFloat(document.getElementById("vehiclesValue").value) || 0;
-            let otherValuables = parseFloat(document.getElementById("otherValuables").value) || 0;
-            let loansGiven = parseFloat(document.getElementById("loansGiven").value) || 0;
-
-            // Calculate precious metals value
-            let goldValue = convertWeight(goldWeight, goldUnit) * goldPrice;
-            let silverValue = convertWeight(silverWeight, silverUnit) * silverPrice;
+            // Calculate gold and silver values
+            let goldGrams = convertWeight(goldWeight, goldUnit);
+            let silverGrams = convertWeight(silverWeight, silverUnit);
+            
+            let goldValue = parseFloat((goldGrams * goldPrice).toFixed(2));
+            let silverValue = parseFloat((silverGrams * silverPrice).toFixed(2));
 
             // Calculate total business assets
-            let totalBusinessAssets = inventoryValue + businessBank + accountsReceivable;
+            let totalBusinessAssets = Number(inventoryValue) + Number(businessBank) + Number(accountsReceivable);
 
             // Calculate total rental assets (annual income is divided by 12 to get monthly value)
-            let totalRentalAssets = (rentalIncome / 12) + outstandingRent + propertyValue;
+            let totalRentalAssets = Number(rentalIncome / 12) + Number(outstandingRent) + Number(propertyValue);
 
             // Calculate total investments
-            let totalInvestments = stocksValue + mutualFundsValue + cryptoValue;
+            let totalInvestments = Number(stocksValue) + Number(mutualFundsValue) + Number(cryptoValue);
 
             // Calculate total other assets
-            let totalOtherAssets = jewelryValue + vehiclesValue + otherValuables + loansGiven;
+            let totalOtherAssets = Number(jewelryValue) + Number(vehiclesValue) + Number(otherValuables) + Number(loansGiven);
 
             // Update category card values
             document.getElementById("cash-value").textContent = formatCurrency(cash);
