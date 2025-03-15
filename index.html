@@ -415,6 +415,79 @@
                 padding-bottom: max(20px, env(safe-area-inset-bottom));
             }
         }
+
+        /* Add these styles to your existing CSS */
+        .rate-value-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-rate-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 4px;
+            font-size: 14px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .toggle-rate-btn:hover {
+            opacity: 1;
+        }
+
+        .manual-rate-input {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .manual-rate-input input {
+            width: 120px;
+            padding: 4px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .apply-rate-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .apply-rate-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .rate-source {
+            text-align: right;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .rate-value-container {
+                flex-direction: column;
+                align-items: flex-end;
+            }
+
+            .manual-rate-input {
+                width: 100%;
+            }
+
+            .manual-rate-input input {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -507,12 +580,41 @@
 
         <div class="rates-card">
             <div class="rate-item">
-                <span class="rate-label"><i class="fas fa-coins"></i> Gold Rate</span>
-                <span id="goldRate" class="rate-value">Fetching...</span>
+                <span class="rate-label">
+                    <i class="fas fa-coins"></i> Gold Rate
+                    <button onclick="toggleManualRate('gold')" class="toggle-rate-btn">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </span>
+                <div class="rate-value-container">
+                    <span id="goldRate" class="rate-value">Fetching...</span>
+                    <div id="goldManualInput" class="manual-rate-input" style="display: none;">
+                        <input type="number" id="manualGoldRate" placeholder="Enter rate per gram" min="0" step="0.01">
+                        <button onclick="updateManualRate('gold')" class="apply-rate-btn">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="rate-item">
-                <span class="rate-label"><i class="fas fa-coins"></i> Silver Rate</span>
-                <span id="silverRate" class="rate-value">Fetching...</span>
+                <span class="rate-label">
+                    <i class="fas fa-coins"></i> Silver Rate
+                    <button onclick="toggleManualRate('silver')" class="toggle-rate-btn">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </span>
+                <div class="rate-value-container">
+                    <span id="silverRate" class="rate-value">Fetching...</span>
+                    <div id="silverManualInput" class="manual-rate-input" style="display: none;">
+                        <input type="number" id="manualSilverRate" placeholder="Enter rate per gram" min="0" step="0.01">
+                        <button onclick="updateManualRate('silver')" class="apply-rate-btn">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="rate-source">
+                <small id="rateSource" style="color: var(--text-color); opacity: 0.7;">Auto-fetched from Metal Price API</small>
             </div>
         </div>
 
@@ -674,6 +776,9 @@
                 // Update the display with current prices
                 document.getElementById("goldRate").innerHTML = `${currencySymbol} ${goldPrice.toFixed(2)}/g`;
                 document.getElementById("silverRate").innerHTML = `${currencySymbol} ${silverPrice.toFixed(2)}/g`;
+
+                // Update rate source indicator
+                document.getElementById('rateSource').innerHTML = 'Auto-fetched from Metal Price API';
 
             } catch (error) {
                 console.error("Error fetching rates:", error);
@@ -907,6 +1012,51 @@
                 });
             }
         });
+
+        // Add these functions to your existing JavaScript
+        function toggleManualRate(metal) {
+            const manualInput = document.getElementById(`${metal}ManualInput`);
+            const rateDisplay = document.getElementById(`${metal}Rate`);
+            
+            if (manualInput.style.display === 'none') {
+                manualInput.style.display = 'flex';
+                rateDisplay.style.display = 'none';
+                // Pre-fill with current rate
+                document.getElementById(`manual${metal.charAt(0).toUpperCase() + metal.slice(1)}Rate`).value = 
+                    metal === 'gold' ? goldPrice.toFixed(2) : silverPrice.toFixed(2);
+            } else {
+                manualInput.style.display = 'none';
+                rateDisplay.style.display = 'inline';
+            }
+        }
+
+        function updateManualRate(metal) {
+            const manualRate = parseFloat(document.getElementById(`manual${metal.charAt(0).toUpperCase() + metal.slice(1)}Rate`).value);
+            if (!isNaN(manualRate) && manualRate >= 0) {
+                const currencySymbols = {
+                    usd: '$', eur: '€', gbp: '£', pkr: '₨', aed: 'د.إ', aud: '$', 
+                    bdt: '৳', bhd: '.د.ب', cad: '$', chf: 'Fr', cny: '¥', egp: '£',
+                    idr: 'Rp', inr: '₹', jod: 'د.ا', jpy: '¥', kwd: 'د.ك', lkr: '₨',
+                    mad: 'د.م.', myr: 'RM', ngn: '₦', omr: 'ر.ع.', qar: 'ر.ق', 
+                    sar: 'ر.س', sgd: '$', try: '₺', zar: 'R'
+                };
+                const currencySymbol = currencySymbols[selectedCurrency] || selectedCurrency.toUpperCase();
+
+                if (metal === 'gold') {
+                    goldPrice = manualRate;
+                    document.getElementById('goldRate').innerHTML = `${currencySymbol} ${manualRate.toFixed(2)}/g (Manual)`;
+                } else {
+                    silverPrice = manualRate;
+                    document.getElementById('silverRate').innerHTML = `${currencySymbol} ${manualRate.toFixed(2)}/g (Manual)`;
+                }
+
+                // Update rate source indicator
+                document.getElementById('rateSource').innerHTML = 'Using manually entered rates';
+                
+                // Hide manual input
+                toggleManualRate(metal);
+            }
+        }
     </script>
 </body>
 </html>
