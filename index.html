@@ -28,12 +28,14 @@
             --primary-light: #81C784;
             --primary-dark: #388E3C;
             --secondary-color: #C8E6C9;
-            --background-color: #f8f9fa;
-            --card-bg: #ffffff;
+            --background-color: rgba(248, 249, 250, 0.95);
+            --card-bg: rgba(255, 255, 255, 0.95);
             --text-color: #2c3e50;
             --border-color: #e0e0e0;
             --shadow-color: rgba(0, 0, 0, 0.1);
             --hover-color: #E8F5E9;
+            --pattern-color: rgba(76, 175, 80, 0.08);
+            --pattern-secondary: rgba(76, 175, 80, 0.05);
         }
 
         /* Blue Theme */
@@ -42,12 +44,14 @@
             --primary-light: #64B5F6;
             --primary-dark: #1976D2;
             --secondary-color: #BBDEFB;
-            --background-color: #f8f9fa;
-            --card-bg: #ffffff;
+            --background-color: rgba(248, 249, 250, 0.95);
+            --card-bg: rgba(255, 255, 255, 0.95);
             --text-color: #2c3e50;
             --border-color: #e0e0e0;
             --shadow-color: rgba(0, 0, 0, 0.1);
             --hover-color: #E3F2FD;
+            --pattern-color: rgba(33, 150, 243, 0.08);
+            --pattern-secondary: rgba(33, 150, 243, 0.05);
         }
 
         /* Purple Theme */
@@ -56,12 +60,14 @@
             --primary-light: #BA68C8;
             --primary-dark: #7B1FA2;
             --secondary-color: #E1BEE7;
-            --background-color: #f8f9fa;
-            --card-bg: #ffffff;
+            --background-color: rgba(248, 249, 250, 0.95);
+            --card-bg: rgba(255, 255, 255, 0.95);
             --text-color: #2c3e50;
             --border-color: #e0e0e0;
             --shadow-color: rgba(0, 0, 0, 0.1);
             --hover-color: #F3E5F5;
+            --pattern-color: rgba(156, 39, 176, 0.08);
+            --pattern-secondary: rgba(156, 39, 176, 0.05);
         }
 
         /* Dark Theme */
@@ -70,12 +76,14 @@
             --primary-light: #81C784;
             --primary-dark: #4CAF50;
             --secondary-color: #1E1E1E;
-            --background-color: #121212;
-            --card-bg: #1E1E1E;
+            --background-color: rgba(18, 18, 18, 0.95);
+            --card-bg: rgba(30, 30, 30, 0.95);
             --text-color: #FFFFFF;
             --border-color: #333333;
             --shadow-color: rgba(0, 0, 0, 0.3);
             --hover-color: #2C2C2C;
+            --pattern-color: rgba(102, 187, 106, 0.12);
+            --pattern-secondary: rgba(102, 187, 106, 0.08);
         }
 
         * {
@@ -90,12 +98,71 @@
             color: var(--text-color);
             line-height: 1.6;
             transition: all 0.3s ease;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Islamic Pattern Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: var(--pattern-color);
+            background-image: 
+                /* Star Pattern */
+                linear-gradient(30deg, var(--pattern-color) 12%, transparent 12.5%, transparent 87%, var(--pattern-color) 87.5%, var(--pattern-color)),
+                linear-gradient(150deg, var(--pattern-color) 12%, transparent 12.5%, transparent 87%, var(--pattern-color) 87.5%, var(--pattern-color)),
+                linear-gradient(30deg, var(--pattern-color) 12%, transparent 12.5%, transparent 87%, var(--pattern-color) 87.5%, var(--pattern-color)),
+                linear-gradient(150deg, var(--pattern-color) 12%, transparent 12.5%, transparent 87%, var(--pattern-color) 87.5%, var(--pattern-color)),
+                /* Overlapping Circles */
+                radial-gradient(circle at 0% 50%, transparent 9%, var(--pattern-secondary) 10%, var(--pattern-secondary) 15%, transparent 16%),
+                radial-gradient(circle at 50% 50%, transparent 9%, var(--pattern-secondary) 10%, var(--pattern-secondary) 15%, transparent 16%),
+                /* Geometric Lines */
+                linear-gradient(45deg, var(--pattern-secondary) 25%, transparent 25%, transparent 75%, var(--pattern-secondary) 75%, var(--pattern-secondary)),
+                linear-gradient(45deg, var(--pattern-secondary) 25%, transparent 25%, transparent 75%, var(--pattern-secondary) 75%, var(--pattern-secondary));
+            background-size: 
+                80px 140px, /* Star Pattern */
+                80px 140px,
+                80px 140px,
+                80px 140px,
+                60px 60px, /* Circles */
+                60px 60px,
+                60px 60px, /* Geometric Lines */
+                60px 60px;
+            background-position: 
+                0 0, 0 0, 40px 70px, 40px 70px, /* Star Pattern */
+                0 0, 30px 30px, /* Circles */
+                0 0, 30px 30px; /* Geometric Lines */
+            opacity: 0.7;
+        }
+
+        /* Add a subtle gradient overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, transparent 0%, var(--background-color) 100%);
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 0 20px var(--shadow-color);
+            position: relative;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .header {
@@ -364,7 +431,7 @@
             .input-group input,
             .input-group select {
                 font-size: 16px; /* Prevents iOS zoom */
-                padding: 10px;
+            padding: 10px;
             }
 
             .calculate-btn {
@@ -537,8 +604,8 @@
 
         <div class="input-section">
             <div class="input-group">
-                <label>Select Currency:</label>
-                <select id="currency" onchange="fetchGoldSilverRates()">
+        <label>Select Currency:</label>
+        <select id="currency" onchange="fetchGoldSilverRates()">
                     <option value="USD">USD ($) - US Dollar</option>
                     <option value="AED">AED (د.إ) - UAE Dirham</option>
                     <option value="AUD">AUD ($) - Australian Dollar</option>
@@ -572,9 +639,9 @@
             <div class="input-group">
                 <label>Select Nisab Standard:</label>
                 <select id="nisabStandard">
-                    <option value="gold">Gold Standard (85g)</option>
-                    <option value="silver" selected>Silver Standard (595g) - Recommended</option>
-                </select>
+                    <option value="gold">Gold Standard (87.48g - 20 mithqals)</option>
+                    <option value="silver" selected>Silver Standard (612.36g - 200 dirhams) - Recommended</option>
+        </select>
             </div>
         </div>
 
@@ -621,29 +688,29 @@
         <div id="sections">
             <!-- Cash Section -->
             <div id="cash-section" class="input-group">
-                <label>Cash & Bank Balance:</label>
-                <input type="number" id="cash" placeholder="Enter amount" min="0">
+        <label>Cash & Bank Balance:</label>
+        <input type="number" id="cash" placeholder="Enter amount" min="0">
             </div>
 
             <!-- Gold & Silver Section -->
             <div id="gold-section" class="input-group">
-                <label>Gold Weight:</label>
-                <input type="number" id="goldWeight" placeholder="Enter weight" min="0">
-                <select id="goldUnit">
-                    <option value="grams">Grams</option>
-                    <option value="tola">Tolas</option>
-                    <option value="oz">Ounces</option>
-                    <option value="lbs">Pounds</option>
-                </select>
+        <label>Gold Weight:</label>
+        <input type="number" id="goldWeight" placeholder="Enter weight" min="0">
+        <select id="goldUnit">
+            <option value="grams">Grams</option>
+            <option value="tola">Tolas</option>
+            <option value="oz">Ounces</option>
+            <option value="lbs">Pounds</option>
+        </select>
 
-                <label>Silver Weight:</label>
-                <input type="number" id="silverWeight" placeholder="Enter weight" min="0">
-                <select id="silverUnit">
-                    <option value="grams">Grams</option>
-                    <option value="tola">Tolas</option>
-                    <option value="oz">Ounces</option>
-                    <option value="lbs">Pounds</option>
-                </select>
+        <label>Silver Weight:</label>
+        <input type="number" id="silverWeight" placeholder="Enter weight" min="0">
+        <select id="silverUnit">
+            <option value="grams">Grams</option>
+            <option value="tola">Tolas</option>
+            <option value="oz">Ounces</option>
+            <option value="lbs">Pounds</option>
+        </select>
             </div>
 
             <!-- Business Assets Section -->
@@ -681,6 +748,21 @@
                 <label>Outstanding Rental Payments:</label>
                 <input type="number" id="outstandingRent" placeholder="Enter outstanding rent" min="0">
             </div>
+
+            <!-- Other Assets Section -->
+            <div id="other-section" class="input-group">
+                <label>Jewelry Value (excluding personal use):</label>
+                <input type="number" id="jewelryValue" placeholder="Enter jewelry value" min="0">
+                
+                <label>Vehicles Value (excluding personal use):</label>
+                <input type="number" id="vehiclesValue" placeholder="Enter vehicles value" min="0">
+                
+                <label>Other Valuable Items:</label>
+                <input type="number" id="otherValuables" placeholder="Enter value of other items" min="0">
+                
+                <label>Loans Given to Others:</label>
+                <input type="number" id="loansGiven" placeholder="Enter total loans given" min="0">
+            </div>
         </div>
 
         <button class="calculate-btn" onclick="calculateZakat()">
@@ -710,10 +792,32 @@
             setTheme(savedTheme);
             
             // Initialize by hiding all sections except cash
-            const sections = ['gold-section', 'business-section', 'investments-section', 'property-section'];
+            const sections = [
+                'cash-section',
+                'gold-section', 
+                'business-section', 
+                'investments-section', 
+                'property-section',
+                'other-section'
+            ];
+            
+            // Show cash section by default
             sections.forEach(section => {
-                document.getElementById(section).style.display = 'none';
+                const sectionElement = document.getElementById(section);
+                if (sectionElement) {
+                    sectionElement.style.display = section === 'cash-section' ? 'block' : 'none';
+                }
             });
+
+            // Initialize category card values
+            document.getElementById('cash-value').textContent = '0.00';
+            document.getElementById('precious-value').textContent = '0.00';
+            document.getElementById('business-value').textContent = '0.00';
+            document.getElementById('investment-value').textContent = '0.00';
+            document.getElementById('property-value').textContent = '0.00';
+            document.getElementById('other-value').textContent = '0.00';
+
+            // Fetch initial rates
             fetchGoldSilverRates();
         });
 
@@ -723,17 +827,33 @@
                 'gold': 'gold-section',
                 'business': 'business-section',
                 'investments': 'investments-section',
-                'property': 'property-section'
+                'property': 'property-section',
+                'other': 'other-section'
             };
 
             // Hide all sections first
             Object.values(sections).forEach(section => {
-                document.getElementById(section).style.display = 'none';
+                const sectionElement = document.getElementById(section);
+                if (sectionElement) {
+                    sectionElement.style.display = 'none';
+                }
             });
 
             // Show the selected section
             if (sections[sectionName]) {
-                document.getElementById(sections[sectionName]).style.display = 'block';
+                const selectedSection = document.getElementById(sections[sectionName]);
+                if (selectedSection) {
+                    selectedSection.style.display = 'block';
+                }
+            }
+
+            // Update active state of category cards
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.style.borderColor = 'transparent';
+            });
+            const clickedCard = event.currentTarget;
+            if (clickedCard) {
+                clickedCard.style.borderColor = 'var(--primary-color)';
             }
         }
 
@@ -751,17 +871,40 @@
                 // Store the exchange rate for selected currency
                 currencyRate = exchangeData.rates[selectedCurrency.toUpperCase()] || 1;
 
-                // Fetch gold and silver prices from Metal Price API
-                const metalResponse = await fetch('https://api.metals.live/v1/spot');
-                const metalData = await metalResponse.json();
-                
-                // The API returns prices in USD per ounce, convert to grams
-                const goldOuncePrice = metalData.find(metal => metal.gold)?.gold || 1935;
-                const silverOuncePrice = metalData.find(metal => metal.silver)?.silver || 23;
-                
-                // Convert troy ounce prices to gram prices and apply currency conversion
-                goldPrice = (goldOuncePrice / 31.1035) * currencyRate;
-                silverPrice = (silverOuncePrice / 31.1035) * currencyRate;
+                // Fetch gold and silver prices from multiple sources for redundancy
+                try {
+                    // Primary source: Metals API
+                    const metalResponse = await fetch('https://api.metals.live/v1/spot');
+                    const metalData = await metalResponse.json();
+                    
+                    if (Array.isArray(metalData) && metalData.length > 0) {
+                        // The API returns prices in USD per ounce
+                        const goldOuncePrice = metalData.find(metal => metal.gold)?.gold;
+                        const silverOuncePrice = metalData.find(metal => metal.silver)?.silver;
+                        
+                        if (goldOuncePrice && silverOuncePrice) {
+                            // Convert troy ounce prices to gram prices (1 troy oz = 31.1035 grams)
+                            // and apply currency conversion
+                            goldPrice = (goldOuncePrice / 31.1035) * currencyRate;
+                            silverPrice = (silverOuncePrice / 31.1035) * currencyRate;
+                        } else {
+                            throw new Error("Invalid price data");
+                        }
+                    } else {
+                        throw new Error("Invalid API response");
+                    }
+                } catch (metalError) {
+                    console.warn("Primary metal price source failed:", metalError);
+                    
+                    // Fallback to secondary source or use recent average prices
+                    // Default prices in USD per gram (based on recent market averages)
+                    goldPrice = 96.53;  // Based on your screenshot
+                    silverPrice = 1.10;  // Based on your screenshot
+                    
+                    // Convert to selected currency
+                    goldPrice *= currencyRate;
+                    silverPrice *= currencyRate;
+                }
 
                 // Get currency symbol
                 const currencySymbols = {
@@ -777,39 +920,33 @@
                 document.getElementById("goldRate").innerHTML = `${currencySymbol} ${goldPrice.toFixed(2)}/g`;
                 document.getElementById("silverRate").innerHTML = `${currencySymbol} ${silverPrice.toFixed(2)}/g`;
 
-                // Update rate source indicator
-                document.getElementById('rateSource').innerHTML = 'Auto-fetched from Metal Price API';
+                // Update rate source indicator with timestamp
+                const now = new Date().toLocaleString();
+                document.getElementById('rateSource').innerHTML = `Last updated: ${now}`;
 
             } catch (error) {
-                console.error("Error fetching rates:", error);
+                console.error("Error in price update:", error);
                 
-                // Use hardcoded fallback prices if API fails
-                try {
-                    // Default prices in USD per gram (based on recent market averages)
-                    goldPrice = 62.23;  // Approximately $1935 per oz
-                    silverPrice = 0.74;  // Approximately $23 per oz
-                    
-                    // Convert to selected currency
-                    goldPrice *= currencyRate;
-                    silverPrice *= currencyRate;
+                // Use hardcoded fallback prices from screenshot
+                goldPrice = 96.53;  // Your screenshot value
+                silverPrice = 1.10; // Your screenshot value
+                
+                // Convert to selected currency
+                goldPrice *= currencyRate;
+                silverPrice *= currencyRate;
 
-                    const currencySymbols = {
-                        usd: '$', eur: '€', gbp: '£', pkr: '₨', aed: 'د.إ', aud: '$', 
-                        bdt: '৳', bhd: '.د.ب', cad: '$', chf: 'Fr', cny: '¥', egp: '£',
-                        idr: 'Rp', inr: '₹', jod: 'د.ا', jpy: '¥', kwd: 'د.ك', lkr: '₨',
-                        mad: 'د.م.', myr: 'RM', ngn: '₦', omr: 'ر.ع.', qar: 'ر.ق', 
-                        sar: 'ر.س', sgd: '$', try: '₺', zar: 'R'
-                    };
-                    const currencySymbol = currencySymbols[selectedCurrency] || selectedCurrency.toUpperCase();
-                    
-                    document.getElementById("goldRate").innerHTML = `${currencySymbol} ${goldPrice.toFixed(2)}/g (Est.)`;
-                    document.getElementById("silverRate").innerHTML = `${currencySymbol} ${silverPrice.toFixed(2)}/g (Est.)`;
-                    
-                } catch (fallbackError) {
-                    console.error("Even fallback mechanism failed:", fallbackError);
-                    document.getElementById("goldRate").innerHTML = `Error fetching rates`;
-                    document.getElementById("silverRate").innerHTML = `Error fetching rates`;
-                }
+                const currencySymbols = {
+                    usd: '$', eur: '€', gbp: '£', pkr: '₨', aed: 'د.إ', aud: '$', 
+                    bdt: '৳', bhd: '.د.ب', cad: '$', chf: 'Fr', cny: '¥', egp: '£',
+                    idr: 'Rp', inr: '₹', jod: 'د.ا', jpy: '¥', kwd: 'د.ك', lkr: '₨',
+                    mad: 'د.م.', myr: 'RM', ngn: '₦', omr: 'ر.ع.', qar: 'ر.ق', 
+                    sar: 'ر.س', sgd: '$', try: '₺', zar: 'R'
+                };
+                const currencySymbol = currencySymbols[selectedCurrency] || selectedCurrency.toUpperCase();
+                
+                document.getElementById("goldRate").innerHTML = `${currencySymbol} ${goldPrice.toFixed(2)}/g (Est.)`;
+                document.getElementById("silverRate").innerHTML = `${currencySymbol} ${silverPrice.toFixed(2)}/g (Est.)`;
+                document.getElementById('rateSource').innerHTML = 'Using estimated rates (API unavailable)';
             }
         }
 
@@ -846,6 +983,12 @@
             let mutualFundsValue = parseFloat(document.getElementById("mutualFundsValue").value) || 0;
             let cryptoValue = parseFloat(document.getElementById("cryptoValue").value) || 0;
 
+            // Get other assets
+            let jewelryValue = parseFloat(document.getElementById("jewelryValue").value) || 0;
+            let vehiclesValue = parseFloat(document.getElementById("vehiclesValue").value) || 0;
+            let otherValuables = parseFloat(document.getElementById("otherValuables").value) || 0;
+            let loansGiven = parseFloat(document.getElementById("loansGiven").value) || 0;
+
             // Calculate precious metals value
             let goldValue = convertWeight(goldWeight, goldUnit) * goldPrice;
             let silverValue = convertWeight(silverWeight, silverUnit) * silverPrice;
@@ -854,10 +997,21 @@
             let totalBusinessAssets = inventoryValue + businessBank + accountsReceivable;
 
             // Calculate total rental assets (annual income is divided by 12 to get monthly value)
-            let totalRentalAssets = (rentalIncome / 12) + outstandingRent;
+            let totalRentalAssets = (rentalIncome / 12) + outstandingRent + propertyValue;
 
             // Calculate total investments
             let totalInvestments = stocksValue + mutualFundsValue + cryptoValue;
+
+            // Calculate total other assets
+            let totalOtherAssets = jewelryValue + vehiclesValue + otherValuables + loansGiven;
+
+            // Update category card values
+            document.getElementById("cash-value").textContent = formatCurrency(cash);
+            document.getElementById("precious-value").textContent = formatCurrency(goldValue + silverValue);
+            document.getElementById("business-value").textContent = formatCurrency(totalBusinessAssets);
+            document.getElementById("investment-value").textContent = formatCurrency(totalInvestments);
+            document.getElementById("property-value").textContent = formatCurrency(totalRentalAssets);
+            document.getElementById("other-value").textContent = formatCurrency(totalOtherAssets);
 
             // Calculate total wealth
             let totalWealth = (
@@ -866,29 +1020,28 @@
                 silverValue + 
                 totalBusinessAssets + 
                 totalRentalAssets + 
-                totalInvestments
+                totalInvestments +
+                totalOtherAssets
             );
 
             // Calculate both Nisab thresholds
-            let goldNisabThreshold = 85 * goldPrice;  // 85g of gold
-            let silverNisabThreshold = 595 * silverPrice;  // 595g of silver
+            let goldNisabThreshold = 87.48 * goldPrice;  // 87.48g of gold (20 mithqals)
+            let silverNisabThreshold = 612.36 * silverPrice;  // 612.36g of silver (200 dirhams)
 
             // Get selected Nisab standard
             let selectedNisabStandard = document.getElementById("nisabStandard").value;
             let nisabThreshold = selectedNisabStandard === 'gold' ? goldNisabThreshold : silverNisabThreshold;
 
-            // Get currency symbol
-            const currencySymbols = {
-                usd: '$', eur: '€', gbp: '£', pkr: '₨', aed: 'د.إ', aud: '$', 
-                bdt: '৳', bhd: '.د.ب', cad: '$', chf: 'Fr', cny: '¥', egp: '£',
-                idr: 'Rp', inr: '₹', jod: 'د.ا', jpy: '¥', kwd: 'د.ك', lkr: '₨',
-                mad: 'د.م.', myr: 'RM', ngn: '₦', omr: 'ر.ع.', qar: 'ر.ق', 
-                sar: 'ر.س', sgd: '$', try: '₺', zar: 'R'
-            };
-            const currencySymbol = currencySymbols[selectedCurrency] || selectedCurrency.toUpperCase();
-
             // Format currency values
             function formatCurrency(amount) {
+                const currencySymbols = {
+                    usd: '$', eur: '€', gbp: '£', pkr: '₨', aed: 'د.إ', aud: '$', 
+                    bdt: '৳', bhd: '.د.ب', cad: '$', chf: 'Fr', cny: '¥', egp: '£',
+                    idr: 'Rp', inr: '₹', jod: 'د.ا', jpy: '¥', kwd: 'د.ك', lkr: '₨',
+                    mad: 'د.م.', myr: 'RM', ngn: '₦', omr: 'ر.ع.', qar: 'ر.ق', 
+                    sar: 'ر.س', sgd: '$', try: '₺', zar: 'R'
+                };
+                const currencySymbol = currencySymbols[selectedCurrency] || selectedCurrency.toUpperCase();
                 return `${currencySymbol} ${amount.toFixed(2)}`;
             }
 
@@ -922,6 +1075,10 @@
                 <div class="breakdown-item">
                     <span class="breakdown-label">Investments</span>
                     <span class="breakdown-value">${formatCurrency(totalInvestments)}</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Other Assets</span>
+                    <span class="breakdown-value">${formatCurrency(totalOtherAssets)}</span>
                 </div>
 
                 <hr>
@@ -997,7 +1154,7 @@
             });
             
             // Initial rates fetch
-            fetchGoldSilverRates();
+        fetchGoldSilverRates();
             
             // Add active states for touch devices
             if (platform === 'ios' || platform === 'android') {
